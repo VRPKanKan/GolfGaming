@@ -3,24 +3,24 @@ using UnityEngine.UI;
 
 public class GolfHit : MonoBehaviour
 {
-    public float maxForce = 20f; // แรงสูงสุดที่ใช้ได้
-    public float chargeSpeed = 10f; // ความเร็วในการชาร์จแรง
-    public float rotationSpeed = 100f; // ความเร็วในการหมุนทิศทาง
-    public float rayDistance = 10f; // ระยะของ Raycast
-    public Slider chargeBar; // หลอดชาร์จ
+    public float maxForce = 20f;
+    public float chargeSpeed = 10f;
+    public float rotationSpeed = 100f; 
+    public float rayDistance = 10f;
+    public Slider chargeBar; 
 
-    private float currentForce = 0f; // แรงปัจจุบันที่ชาร์จอยู่
+    private float currentForce = 0f;
     private Rigidbody rb;
-    private Vector3 hitDirection = Vector3.forward; // ทิศทางการตีเริ่มต้น
+    private Vector3 hitDirection = Vector3.forward;
     private LineRenderer lineRenderer;
-    private float verticalAngle = 0f; // มุมเงยในแกน X
-    private float maxVerticalAngle = 45f; // ขีดจำกัดมุมเงย
+    private float verticalAngle = 0f; 
+    private float maxVerticalAngle = 45f; 
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 2; // จุดเริ่มและจบ
+        lineRenderer.positionCount = 2; 
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -36,12 +36,12 @@ public class GolfHit : MonoBehaviour
         RotateDirection();
         DrawRaycast();
 
-        if (Input.GetMouseButton(0)) // กดค้างเพื่อตี
+        if (Input.GetMouseButton(0))
         {
             ChargeForce();
         }
 
-        if (Input.GetMouseButtonUp(0)) // ปล่อยปุ่มเพื่อตี
+        if (Input.GetMouseButtonUp(0)) 
         {
             ApplyForce();
         }
@@ -49,8 +49,8 @@ public class GolfHit : MonoBehaviour
 
     void RotateDirection()
     {
-        float horizontal = Input.GetAxis("Horizontal"); // A/D หรือ ลูกศรซ้ายขวา
-        float vertical = Input.GetAxis("Vertical"); // W/S หรือ ลูกศรขึ้นลง
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical"); 
 
         if (horizontal != 0)
         {
@@ -64,23 +64,23 @@ public class GolfHit : MonoBehaviour
             transform.localEulerAngles = new Vector3(verticalAngle, transform.localEulerAngles.y, 0f);
         }
 
-        hitDirection = transform.forward; // อัปเดตทิศทางตามการหมุนของบอล
+        hitDirection = transform.forward; 
     }
 
     void ChargeForce()
     {
         if (currentForce < maxForce)
         {
-            currentForce += chargeSpeed * Time.deltaTime; // เพิ่มแรงทีละน้อย
-            chargeBar.value = currentForce; // อัปเดตหลอดชาร์จ
+            currentForce += chargeSpeed * Time.deltaTime; 
+            chargeBar.value = currentForce; 
         }
     }
 
     void ApplyForce()
     {
         rb.AddForce(hitDirection * currentForce, ForceMode.Impulse);
-        currentForce = 0f; // รีเซ็ตค่าแรงหลังตี
-        chargeBar.value = 0f; // รีเซ็ตหลอดชาร์จ
+        currentForce = 0f; 
+        chargeBar.value = 0f; 
     }
 
     void DrawRaycast()
